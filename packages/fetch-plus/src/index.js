@@ -149,10 +149,6 @@ const _callFetch = (endpoint, path = "", options = {}, middlewares = []) => {
 
 		return fetchFunc(request.url + request.path + query, request.options);
 	}).then((response) => {
-		if (!response.ok) {
-			throw response;
-		}
-
 		if (!afterMiddlewares.length) {
 			return response;
 		}
