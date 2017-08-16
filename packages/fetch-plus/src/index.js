@@ -2,7 +2,6 @@
  * @copyright © 2015, Rick Wong. All rights reserved.
  */
 import queryString from "query-string";
-import {compute, computeObject} from "utils/compute";
 
 const _trimSlashes = (string) => {
 	return string.toString().replace(/(^\/+|\/+$)/g, "");
@@ -79,15 +78,13 @@ const _callFetch = (endpoint, path = "", options = {}, middlewares = []) => {
 	}
 
 	return new Promise((resolve, reject) => {
-		const url = normalizeFunc(compute(endpoint.url));
-
-		path = compute(path);
+		const url = normalizeFunc(endpoint.url);
 
 		if (!(path instanceof Array)) {
 			path = [path];
 		}
 
-		path = normalizeFunc(path.map(compute).map(encodeURI).join("/"));
+		path = normalizeFunc(path.map(encodeURI).join("/"));
 
 		if (path && path[0] !== "/") {
 			path = "/" + path;
@@ -108,8 +105,8 @@ const _callFetch = (endpoint, path = "", options = {}, middlewares = []) => {
 
 		options = {
 			headers: {},
-			...computeObject(endpoint.options),
-			...computeObject(options)
+			...endpoint.options,
+			...options
 		};
 
 		resolve({url, path, options});
@@ -141,10 +138,10 @@ const _callFetch = (endpoint, path = "", options = {}, middlewares = []) => {
 		let query = request.options.query || "";
 
 		if (typeof query === "object") {
-			query = "?" + queryString.stringify(computeObject(query));
+			query = "?" + queryString.stringify(query);
 		}
 		else if (query !== "") {
-			query = "?" + compute(query);
+			query = "?" + query;
 		}
 
 		return fetchFunc(request.url + request.path + query, request.options);
@@ -185,8 +182,6 @@ const _callFetch = (endpoint, path = "", options = {}, middlewares = []) => {
 };
 
 const _expectEven = (array) => {
-	array = compute(array);
-
 	if (array instanceof Array && array.length % 2 !== 0) {
 		throw new RangeError("Expected even array");
 	}
@@ -195,8 +190,6 @@ const _expectEven = (array) => {
 }
 
 const _expectOdd = (array) => {
-	array = compute(array);
-
 	if (array instanceof Array && array.length % 2 !== 1) {
 		throw new RangeError("Expected odd array");
 	}
@@ -284,8 +277,5 @@ module.exports = {
 	// CRUD:
 	list: browse,
 	update: edit,
-	create: add,
-	// Utilities:
-	compute,
-	computeObject
+	create: add
 };
