@@ -1,5 +1,5 @@
 {
-  "name": "fetch-plus",
+  "name": "@rgssup/fetch-plus",
   "description": "A convenient Fetch API library with first-class middleware support",
   "version": "4.0.0-alpha.0",
   "license": "BSD-3-Clause",
